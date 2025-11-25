@@ -44,6 +44,12 @@ export abstract class GameService {
         name: true,
         description: true,
         thumbnail_image: true,
+        total_played: true,
+        _count: {
+          select: {
+            liked: true,
+          },
+        },
         is_published: is_private,
         game_template: {
           select: {
@@ -69,7 +75,9 @@ export abstract class GameService {
     };
 
     const paginationResult = await paginate<
-      Games & { creator: Users } & { game_template: GameTemplates },
+      Games & { creator: Users } & { game_template: GameTemplates } & {
+        _count: { liked: number };
+      },
       typeof args
     >(prisma.games, query.page, query.perPage, args);
 
@@ -80,6 +88,8 @@ export abstract class GameService {
       is_published: is_private ? game.is_published : undefined,
       creator_id: user_id ? undefined : game.creator.id,
       creator_name: user_id ? undefined : game.creator.username,
+      toal_liked: game._count.liked,
+      _count: undefined,
     }));
 
     return {
