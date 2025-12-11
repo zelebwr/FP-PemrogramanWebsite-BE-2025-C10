@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeopardy!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #060ce9;
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(180deg, #000428 0%, #060ce9 100%);
+            padding: 15px 20px;
+            text-align: center;
+            border-bottom: 4px solid #ffd700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-family: 'Anton', sans-serif;
+            font-size: 2.5rem;
+            color: #fff;
+            text-shadow: 3px 3px 0 #000;
+            letter-spacing: 3px;
+        }
+
+        .header h1 span {
+            color: #ffd700;
+        }
+
+        .game-title-header {
+            font-size: 1rem;
+            color: #ffd700;
+            max-width: 300px;
+            text-align: right;
+        }
+
+        /* Score Board */
+        .score-bar {
+            background: #000;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .team-score {
+            text-align: center;
+            padding: 8px 25px;
+            background: linear-gradient(180deg, #1a1a8c 0%, #060ce9 100%);
+            border-radius: 8px;
+            border: 2px solid #333;
+            min-width: 120px;
+            transition: all 0.3s;
+        }
+
+        .team-score.active {
+            border-color: #ffd700;
+            box-shadow: 0 0 15px #ffd700;
+        }
+
+        .team-score .name {
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+        }
+
+        .team-score .score {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.3rem;
+            color: #ffd700;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        /* Board */
+        .board {
+            display: grid;
+            gap: 6px;
+            background: #000;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .category-header {
+            background: linear-gradient(180deg, #1a1a8c 0%, #060ce9 100%);
+            padding: 15px 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            border: 2px solid #000;
+            border-radius: 4px;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .clue-cell {
+            background: linear-gradient(180deg, #1a1a8c 0%, #060ce9 100%);
+            padding: 15px;
+            text-align: center;
+            font-family: 'Anton', sans-serif;
+            font-size: 1.8rem;
+            color: #ffd700;
+            border: 2px solid #000;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        .clue-cell:hover:not(.used) {
+            transform: scale(1.03);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            z-index: 5;
+        }
+
+        .clue-cell.used {
+            background: #1a1a4c;
+            color: transparent;
+            cursor: default;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .clue-box {
+            background: linear-gradient(180deg, #060ce9 0%, #1a1a8c 100%);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            border: 6px solid #ffd700;
+            border-radius: 15px;
+            animation: popIn 0.3s ease;
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .clue-value {
+            font-family: 'Anton', sans-serif;
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .clue-category {
+            font-size: 0.9rem;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+
+        .clue-question {
+            font-size: 1.6rem;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 3px #000;
+        }
+
+        .answer-input {
+            width: 100%;
+            max-width: 450px;
+            padding: 12px 18px;
+            font-size: 1.1rem;
+            border: 3px solid #ffd700;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            box-shadow: 0 0 12px #ffd700;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-submit {
+            background: linear-gradient(180deg, #28a745 0%, #1e7e34 100%);
+            color: #fff;
+        }
+
+        .btn-reveal {
+            background: linear-gradient(180deg, #ffc107 0%, #d39e00 100%);
+            color: #000;
+        }
+
+        .btn-skip {
+            background: linear-gradient(180deg, #6c757d 0%, #545b62 100%);
+            color: #fff;
+        }
+
+        .btn-continue {
+            background: linear-gradient(180deg, #007bff 0%, #0056b3 100%);
+            color: #fff;
+            margin-top: 20px;
+        }
+
+        /* Result */
+        .result-box {
+            display: none;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .result-box.correct {
+            display: block;
+            background: rgba(40, 167, 69, 0.2);
+            border: 3px solid #28a745;
+        }
+
+        .result-box.incorrect {
+            display: block;
+            background: rgba(220, 53, 69, 0.2);
+            border: 3px solid #dc3545;
+        }
+
+        .result-text {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .result-box.correct .result-text {
+            color: #28a745;
+        }
+
+        .result-box.incorrect .result-text {
+            color: #dc3545;
+        }
+
+        .correct-answer {
+            color: #ffd700;
+            font-size: 1.1rem;
+        }
+
+        /* Setup Screen */
+        .setup-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 80px);
+            padding: 20px;
+        }
+
+        .setup-box {
+            background: linear-gradient(180deg, #1a1a8c 0%, #060ce9 100%);
+            padding: 35px;
+            border-radius: 15px;
+            border: 3px solid #ffd700;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .setup-box h2 {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.8rem;
+            color: #ffd700;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #444;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+
+        .team-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .game-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 8px;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .game-option {
+            padding: 12px;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .game-option:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .game-option.selected {
+            background: rgba(255, 215, 0, 0.2);
+            border-left: 3px solid #ffd700;
+        }
+
+        .game-option h4 {
+            color: #ffd700;
+            font-size: 0.95rem;
+            margin-bottom: 3px;
+        }
+
+        .game-option p {
+            color: #777;
+            font-size: 0.8rem;
+        }
+
+        .btn-start {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-family: 'Anton', sans-serif;
+            background: linear-gradient(180deg, #ffd700 0%, #ff9500 100%);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+
+        .btn-start:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .btn-start:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #1a1a8c;
+            border-top-color: #ffd700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Game Over */
+        .game-over {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .game-over h2 {
+            font-family: 'Anton', sans-serif;
+            font-size: 3rem;
+            color: #ffd700;
+            margin-bottom: 30px;
+        }
+
+        .final-scores {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .final-card {
+            background: linear-gradient(180deg, #1a1a8c 0%, #060ce9 100%);
+            padding: 25px 40px;
+            border-radius: 12px;
+            border: 3px solid #ffd700;
+        }
+
+        .final-card.winner {
+            box-shadow: 0 0 30px #ffd700;
+            transform: scale(1.1);
+        }
+
+        .final-card h3 {
+            color: #ccc;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .final-card .score {
+            font-family: 'Anton', sans-serif;
+            font-size: 2.5rem;
+            color: #ffd700;
+        }
+
+        .final-card .trophy {
+            color: #ffd700;
+            font-size: 1.5rem;
+            margin-top: 8px;
+        }
+
+        .btn-replay {
+            padding: 15px 50px;
+            font-size: 1.2rem;
+            font-family: 'Anton', sans-serif;
+            background: linear-gradient(180deg, #ffd700 0%, #ff9500 100%);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            letter-spacing: 2px;
+        }
+
+        .btn-replay:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Error message */
+        .error-msg {
+            text-align: center;
+            padding: 30px;
+            color: #ff6b6b;
+        }
+
+        .error-msg h3 {
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .clue-cell {
+                font-size: 1.2rem;
+                min-height: 60px;
+                padding: 10px;
+            }
+
+            .category-header {
+                font-size: 0.7rem;
+                min-height: 55px;
+                padding: 8px 5px;
+            }
+
+            .clue-question {
+                font-size: 1.2rem;
+            }
+
+            .clue-box {
+                padding: 25px;
+            }
+
+            .team-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <h1>JEOPARDY<span>!</span></h1>
+        <div class="game-title-header" id="gameTitleHeader"></div>
+    </header>
+
+    <!-- Score Bar (hidden until game starts) -->
+    <div class="score-bar" id="scoreBar" style="display: none;"></div>
+
+    <!-- Main Container -->
+    <div class="container" id="mainContainer">
+
+        <!-- Setup Screen -->
+        <div class="setup-screen" id="setupScreen">
+            <div class="setup-box">
+                <h2>🎯 PILIH GAME</h2>
+
+                <div class="form-group">
+                    <label>Game Tersedia:</label>
+                    <div class="game-list" id="gameList">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p>Memuat game...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Jumlah Tim:</label>
+                    <select id="teamCount">
+                        <option value="1">1 Pemain (Solo)</option>
+                        <option value="2" selected>2 Tim</option>
+                        <option value="3">3 Tim</option>
+                        <option value="4">4 Tim</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Nama Tim:</label>
+                    <div class="team-inputs" id="teamInputs">
+                        <input type="text" id="team1" placeholder="Tim 1" value="Tim 1">
+                        <input type="text" id="team2" placeholder="Tim 2" value="Tim 2">
+                    </div>
+                </div>
+
+                <button class="btn-start" id="btnStart" disabled onclick="startGame()">
+                    MULAI PERMAINAN
+                </button>
+            </div>
+        </div>
+
+        <!-- Game Board (hidden until game starts) -->
+        <div id="gameBoard" style="display: none;"></div>
+
+        <!-- Game Over Screen (hidden) -->
+        <div class="game-over" id="gameOver" style="display: none;">
+            <h2>🏆 PERMAINAN SELESAI!</h2>
+            <div class="final-scores" id="finalScores"></div>
+            <button class="btn-replay" onclick="resetGame()">MAIN LAGI</button>
+        </div>
+
+    </div>
+
+    <!-- Clue Modal -->
+    <div class="modal" id="clueModal">
+        <div class="clue-box">
+            <div class="clue-value" id="clueValue">$200</div>
+            <div class="clue-category" id="clueCategory">Kategori</div>
+            <div class="clue-question" id="clueQuestion">Pertanyaan akan muncul di sini...</div>
+
+            <div id="answerSection">
+                <input type="text" class="answer-input" id="answerInput" placeholder="Ketik jawaban..."
+                    autocomplete="off">
+                <div class="btn-row">
+                    <button class="btn btn-submit" onclick="submitAnswer()">Jawab</button>
+                    <button class="btn btn-reveal" onclick="revealAnswer()">Lihat Jawaban</button>
+                    <button class="btn btn-skip" onclick="skipClue()">Lewati</button>
+                </div>
+            </div>
+
+            <div class="result-box" id="resultBox">
+                <div class="result-text" id="resultText"></div>
+                <div class="correct-answer" id="correctAnswerText"></div>
+                <button class="btn btn-continue" onclick="closeClue()">Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ CONFIGURATION ============
+        const API_BASE = 'http://localhost:4000';
+
+        // ============ GAME STATE ============
+        let gameData = null;
+        let teams = [];
+        let currentTeam = 0;
+        let currentClue = null;
+        let usedClues = new Set();
+        let totalClues = 0;
+        let selectedGameId = null;
+
+        // ============ INITIALIZATION ============
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGames();
+            setupListeners();
+        });
+
+        function setupListeners() {
+            // Team count change
+            document.getElementById('teamCount').addEventListener('change', (e) => {
+                const count = parseInt(e.target.value);
+                const container = document.getElementById('teamInputs');
+                let html = '';
+                for (let i = 1; i <= count; i++) {
+                    html += `<input type="text" id="team${i}" placeholder="Tim ${i}" value="Tim ${i}">`;
+                }
+                container.innerHTML = html;
+            });
+
+            // Enter key to submit answer
+            document.getElementById('answerInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') submitAnswer();
+            });
+        }
+
+        // ============ LOAD GAMES ============
+        async function loadGames() {
+            try {
+                const res = await fetch(`${API_BASE}/api/game?page=1&perPage=50`);
+                const json = await res.json();
+
+                const gameList = document.getElementById('gameList');
+                const games = json.data?.data || [];
+
+                if (games.length === 0) {
+                    gameList.innerHTML = `<div class="error-msg"><h3>Tidak ada game</h3><p>Belum ada game yang dibuat.</p></div>`;
+                    return;
+                }
+
+                gameList.innerHTML = games.map(g => `
+          <div class="game-option" onclick="selectGame('${g.id}', this)">
+            <h4>${g.name}</h4>
+            <p>${g.description || 'Tidak ada deskripsi'}</p>
+          </div>
+        `).join('');
+
+            } catch (err) {
+                document.getElementById('gameList').innerHTML = `
+          <div class="error-msg">
+            <h3>Gagal memuat game</h3>
+            <p>Pastikan server backend sudah berjalan.</p>
+          </div>
+        `;
+            }
+        }
+
+        function selectGame(id, el) {
+            selectedGameId = id;
+            document.querySelectorAll('.game-option').forEach(e => e.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('btnStart').disabled = false;
+        }
+
+        // ============ START GAME ============
+        async function startGame() {
+            if (!selectedGameId) return alert('Pilih game terlebih dahulu!');
+
+            // Setup teams
+            const count = parseInt(document.getElementById('teamCount').value);
+            teams = [];
+            for (let i = 1; i <= count; i++) {
+                const input = document.getElementById(`team${i}`);
+                teams.push({ name: input?.value || `Tim ${i}`, score: 0 });
+            }
+            currentTeam = 0;
+
+            // Show loading
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('gameBoard').innerHTML = `<div class="loading"><div class="spinner"></div><p>Memuat permainan...</p></div>`;
+            document.getElementById('gameBoard').style.display = 'block';
+
+            try {
+                const res = await fetch(`${API_BASE}/api/game/jeopardy/${selectedGameId}/play/public`);
+                const json = await res.json();
+
+                if (!json.data || !json.data.rounds) {
+                    throw new Error('Data game tidak valid');
+                }
+
+                gameData = json.data;
+                renderBoard();
+
+            } catch (err) {
+                document.getElementById('gameBoard').innerHTML = `
+          <div class="error-msg">
+            <h3>Gagal memuat game</h3>
+            <p>${err.message}</p>
+            <button class="btn btn-continue" onclick="resetGame()">Kembali</button>
+          </div>
+        `;
+            }
+        }
+
+        // ============ RENDER BOARD ============
+        function renderBoard() {
+            // Show score bar
+            document.getElementById('scoreBar').style.display = 'flex';
+            document.getElementById('gameTitleHeader').textContent = gameData.name || '';
+            renderScores();
+
+            const round = gameData.rounds[0];
+            if (!round?.categories) {
+                document.getElementById('gameBoard').innerHTML = `<div class="error-msg"><h3>Game tidak memiliki kategori</h3></div>`;
+                return;
+            }
+
+            const categories = round.categories;
+            const numCats = categories.length;
+            const maxClues = Math.max(...categories.map(c => c.clues?.length || 0));
+
+            totalClues = categories.reduce((sum, c) => sum + (c.clues?.length || 0), 0);
+
+            let html = '';
+
+            // Category headers
+            categories.forEach(c => {
+                html += `<div class="category-header">${c.title}</div>`;
+            });
+
+            // Clue cells
+            for (let row = 0; row < maxClues; row++) {
+                categories.forEach(cat => {
+                    const clue = cat.clues?.[row];
+                    if (clue) {
+                        const key = `${round.id}|${cat.id}|${clue.id}`;
+                        html += `
+              <div class="clue-cell" id="cell-${key}" onclick="openClue('${round.id}','${cat.id}','${clue.id}','${cat.title}',${clue.value})">
+                $${clue.value}
+              </div>
+            `;
+                    } else {
+                        html += `<div class="clue-cell used"></div>`;
+                    }
+                });
+            }
+
+            const board = document.createElement('div');
+            board.className = 'board';
+            board.style.gridTemplateColumns = `repeat(${numCats}, 1fr)`;
+            board.innerHTML = html;
+
+            document.getElementById('gameBoard').innerHTML = '';
+            document.getElementById('gameBoard').appendChild(board);
+        }
+
+        function renderScores() {
+            document.getElementById('scoreBar').innerHTML = teams.map((t, i) => `
+        <div class="team-score ${i === currentTeam ? 'active' : ''}">
+          <div class="name">${t.name}</div>
+          <div class="score">$${t.score.toLocaleString()}</div>
+        </div>
+      `).join('');
+        }
+
+        // ============ CLUE HANDLING ============
+        function openClue(roundId, catId, clueId, catTitle, value) {
+            const key = `${roundId}|${catId}|${clueId}`;
+            if (usedClues.has(key)) return;
+
+            // Find clue data
+            const round = gameData.rounds.find(r => r.id === roundId);
+            const cat = round?.categories?.find(c => c.id === catId);
+            const clue = cat?.clues?.find(c => c.id === clueId);
+            if (!clue) return;
+
+            currentClue = { roundId, catId, clueId, key, value, question: clue.question, catTitle };
+
+            // Show modal
+            document.getElementById('clueValue').textContent = `$${value}`;
+            document.getElementById('clueCategory').textContent = catTitle;
+            document.getElementById('clueQuestion').textContent = clue.question;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('answerSection').style.display = 'block';
+            document.getElementById('resultBox').className = 'result-box';
+            document.getElementById('clueModal').classList.add('active');
+            document.getElementById('answerInput').focus();
+        }
+
+        async function submitAnswer() {
+            const answer = document.getElementById('answerInput').value.trim();
+            if (!answer) return;
+
+            try {
+                const res = await fetch(`${API_BASE}/api/game/jeopardy/${selectedGameId}/check`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        round_id: currentClue.roundId,
+                        category_id: currentClue.catId,
+                        clue_id: currentClue.clueId,
+                        submitted_answer: answer
+                    })
+                });
+
+                const json = await res.json();
+                const result = json.data;
+
+                if (result?.is_correct) {
+                    showResult(true, result.correct_answer, result.points_earned);
+                    teams[currentTeam].score += result.points_earned;
+                } else {
+                    showResult(false, result?.correct_answer || 'Tidak diketahui', 0);
+                    teams[currentTeam].score -= currentClue.value;
+                }
+                renderScores();
+
+            } catch (err) {
+                showResult(false, 'Error memeriksa jawaban', 0);
+            }
+        }
+
+        async function revealAnswer() {
+            try {
+                const res = await fetch(`${API_BASE}/api/game/jeopardy/${selectedGameId}/check`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        round_id: currentClue.roundId,
+                        category_id: currentClue.catId,
+                        clue_id: currentClue.clueId,
+                        submitted_answer: ''
+                    })
+                });
+
+                const json = await res.json();
+                showResult(false, json.data?.correct_answer || 'Tidak diketahui', 0);
+            } catch {
+                showResult(false, 'Error', 0);
+            }
+        }
+
+        function skipClue() {
+            closeClue();
+        }
+
+        function showResult(correct, correctAnswer, points) {
+            document.getElementById('answerSection').style.display = 'none';
+            const box = document.getElementById('resultBox');
+            const text = document.getElementById('resultText');
+            const answerEl = document.getElementById('correctAnswerText');
+
+            if (correct) {
+                box.className = 'result-box correct';
+                text.textContent = `✓ BENAR! +$${points}`;
+            } else {
+                box.className = 'result-box incorrect';
+                text.textContent = `✗ SALAH! -$${currentClue.value}`;
+            }
+            answerEl.textContent = `Jawaban: ${correctAnswer}`;
+        }
+
+        function closeClue() {
+            usedClues.add(currentClue.key);
+            const cell = document.getElementById(`cell-${currentClue.key}`);
+            if (cell) {
+                cell.classList.add('used');
+                cell.textContent = '';
+            }
+
+            // Next team
+            currentTeam = (currentTeam + 1) % teams.length;
+            renderScores();
+
+            document.getElementById('clueModal').classList.remove('active');
+            currentClue = null;
+
+            // Check game over
+            if (usedClues.size >= totalClues) {
+                endGame();
+            }
+        }
+
+        // ============ END GAME ============
+        function endGame() {
+            document.getElementById('gameBoard').style.display = 'none';
+            document.getElementById('scoreBar').style.display = 'none';
+
+            const maxScore = Math.max(...teams.map(t => t.score));
+
+            document.getElementById('finalScores').innerHTML = teams.map(t => `
+        <div class="final-card ${t.score === maxScore ? 'winner' : ''}">
+          <h3>${t.name}</h3>
+          <div class="score">$${t.score.toLocaleString()}</div>
+          ${t.score === maxScore ? '<div class="trophy">🏆 PEMENANG!</div>' : ''}
+        </div>
+      `).join('');
+
+            document.getElementById('gameOver').style.display = 'block';
+        }
+
+        // ============ RESET GAME ============
+        function resetGame() {
+            gameData = null;
+            teams = [];
+            currentTeam = 0;
+            currentClue = null;
+            usedClues = new Set();
+            totalClues = 0;
+            selectedGameId = null;
+
+            document.getElementById('setupScreen').style.display = 'flex';
+            document.getElementById('gameBoard').style.display = 'none';
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('scoreBar').style.display = 'none';
+            document.getElementById('gameTitleHeader').textContent = '';
+            document.getElementById('btnStart').disabled = true;
+
+            document.querySelectorAll('.game-option').forEach(e => e.classList.remove('selected'));
+            loadGames();
+        }
+    </script>
+</body>
+
+</html>
