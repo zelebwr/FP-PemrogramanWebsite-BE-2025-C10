@@ -41,5 +41,3 @@ prisma/seeder/data/users-prod.data.csv
 
 uploads
 
-# Test Frontend (local only)
-test-frontend/
