@@ -14,6 +14,7 @@ const ClueSchema = z.object({
   answer: z.string().min(1, 'Answer is required').max(255),
   value: z.number().int().positive('Value must be positive'),
   media_url: z.string().url().optional().nullable(),
+  media_image_index: z.number().int().min(0).optional().nullable(),
   is_daily_double: z.boolean().default(false),
 });
 
@@ -58,6 +59,7 @@ export const CreateJeopardySchema = z.object({
   name: z.string().min(1).max(128).trim(),
   description: z.string().max(256).trim().optional(),
   thumbnail_image: fileSchema({}),
+  files_to_upload: z.array(fileSchema({})).optional(),
   is_publish_immediately: StringToBooleanSchema.default(false),
   settings: StringToObjectSchema(SettingsSchema),
   rounds: StringToObjectSchema(

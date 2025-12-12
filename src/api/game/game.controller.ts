@@ -6,19 +6,12 @@ import {
 } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import {
-  type AuthedRequest,
-  SuccessResponse,
-  validateAuth,
-} from '@/common';
+import { type AuthedRequest, SuccessResponse, validateAuth } from '@/common';
 import { AdditionalValidation } from '@/utils';
 
 import { GameService } from './game.service';
 import GameListRouter from './game-list/game-list.router';
-import {
-  GamePaginateQuerySchema,
-  GameTemplateQuerySchema,
-} from './schema';
+import { GamePaginateQuerySchema, GameTemplateQuerySchema } from './schema';
 
 export const GameController = Router()
   .get(

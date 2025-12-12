@@ -1,0 +1,4634 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Default module",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "User"
+    },
+    {
+      "name": "Game/Game List/Quiz"
+    },
+    {
+      "name": "Game"
+    }
+  ],
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "summary": "Login",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              },
+              "examples": {
+                "1": {
+                  "value": {
+                    "email": "super-admin-fp@pweb-it.id",
+                    "password": "Password##2025!"
+                  },
+                  "summary": "Current User"
+                },
+                "2": {
+                  "value": {
+                    "email": "super-admin-fp@pweb-it.id",
+                    "password": "Password##2025!"
+                  },
+                  "summary": "Super Admin"
+                },
+                "3": {
+                  "value": {
+                    "email": "admin-fp@pweb-it.id",
+                    "password": "Password##2025!"
+                  },
+                  "summary": "Admin"
+                },
+                "4": {
+                  "value": {
+                    "email": "user1-fp@pweb-it.id",
+                    "password": "Password##2025!"
+                  },
+                  "summary": "User 1"
+                },
+                "5": {
+                  "value": {
+                    "email": "user2-fp@pweb-it.id",
+                    "password": "Password##2025!"
+                  },
+                  "summary": "User 2"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "access_token": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "access_token"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Logged in successfully",
+                  "data": {
+                    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOGI2MmIzM2YtNDU3NS00MmQzLTg1Y2UtMjdjMzQxMjIxNDNhIiwiZW1haWwiOiJzdXBlci1hZG1pbi1mcEBwd2ViLWl0LmlkIiwicm9sZSI6IlNVUEVSX0FETUlOIiwiaWF0IjoxNzYzMzIwMzg0LCJleHAiOjE3ODQ5MjAzODR9.v6WDT6IpZyXtY6am0Wi5Z44XRWmCd7i5SC58LqCwuLg"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "John FP"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "john-fp@mail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "Secret!Pass67"
+                  },
+                  "profile_picture": {
+                    "format": "binary",
+                    "type": "string",
+                    "example": "file://D:\\[1] PICTURES\\NO\\bdr\\hna.jpg"
+                  }
+                },
+                "required": [
+                  "username",
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 201,
+                      "const": 201
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {}
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "array"
+                              },
+                              {
+                                "type": "object"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ],
+                            "type": "null"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 201,
+                  "message": "Account created successfully"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "summary": "Get Me",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "role": {
+                          "type": "string"
+                        },
+                        "profile_picture": {
+                          "type": "string"
+                        },
+                        "total_game_played": {
+                          "type": "integer"
+                        },
+                        "total_game_liked": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "username",
+                        "email",
+                        "role",
+                        "profile_picture",
+                        "total_game_played",
+                        "total_game_liked"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Get user data successfully",
+                  "data": {
+                    "id": "8b62b33f-4575-42d3-85ce-27c34122143a",
+                    "username": "Kak Super Admin",
+                    "email": "super-admin-fp@pweb-it.id",
+                    "role": "SUPER_ADMIN",
+                    "profile_picture": "uploads/profile-picture/user-8b62b33f-4575-42d3-85ce-27c34122143a.jpg",
+                    "total_game_played": 0,
+                    "total_game_liked": 0
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/auth/me/game": {
+      "get": {
+        "summary": "Get Me Game",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": 0,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": 0,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "gameTypeSlug",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderByName",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "asc",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderByCreatedAt",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "desc",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderByLikeAmount",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "asc",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderByPlayAmount",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "desc",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 200,
+                      "const": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {}
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "array"
+                              },
+                              {
+                                "type": "object"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ],
+                            "type": "null"
+                          }
+                        }
+                      ]
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/Pagination%20Meta"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Get all user game (private) successfully",
+                  "data": [
+                    {
+                      "id": "196adfde-18ab-4491-8a91-4054b317428b",
+                      "name": "Quiz tes 2 - apip",
+                      "description": "whoa",
+                      "thumbnail_image": "uploads/game/quiz/196adfde-18ab-4491-8a91-4054b317428b/Bob_1763904604448.png",
+                      "total_played": 3,
+                      "is_published": true,
+                      "game_template": "quiz",
+                      "is_game_liked": true,
+                      "total_liked": 1
+                    },
+                    {
+                      "id": "3f9d67e1-e2ce-41cf-90ae-d69479b7174e",
+                      "name": "Quiz tes 1 - apip",
+                      "description": "whoa",
+                      "thumbnail_image": "uploads/game/quiz/3f9d67e1-e2ce-41cf-90ae-d69479b7174e/Bob_1763904533069.png",
+                      "total_played": 0,
+                      "is_published": false,
+                      "game_template": "quiz",
+                      "is_game_liked": false,
+                      "total_liked": 0
+                    },
+                    {
+                      "id": "d13a76b0-b779-45ce-b00e-0bcf3957b149",
+                      "name": "Quiz Super Rumit",
+                      "description": "Lorem Ipsum",
+                      "thumbnail_image": "uploads/game/quiz/d13a76b0-b779-45ce-b00e-0bcf3957b149/thumbnail.png",
+                      "total_played": 0,
+                      "is_published": true,
+                      "game_template": "quiz",
+                      "is_game_liked": false,
+                      "total_liked": 0
+                    }
+                  ],
+                  "meta": {
+                    "total": 3,
+                    "lastPage": 1,
+                    "currentPage": 1,
+                    "perPage": 20,
+                    "prev": null,
+                    "next": null
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user": {
+      "get": {
+        "summary": "Get User List",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": 1,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": 3,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "description": "enum",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "USER",
+                "ADMIN",
+                "SUPER_ADMIN"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderById",
+            "in": "query",
+            "description": "enum",
+            "required": false,
+            "example": "asc",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "orderByName",
+            "in": "query",
+            "description": "enum",
+            "required": false,
+            "example": "desc",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "orderByCreatedAt",
+            "in": "query",
+            "description": "enum",
+            "required": false,
+            "example": "asc",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 200,
+                      "const": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {}
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "array"
+                              },
+                              {
+                                "type": "object"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ],
+                            "type": "null"
+                          }
+                        }
+                      ]
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/Pagination%20Meta"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Get user list successfully",
+                  "data": [
+                    {
+                      "id": "2a65a9ec-8479-40d9-9d50-9557854060aa",
+                      "username": "User 2",
+                      "email": "user2-fp@pweb-it.id",
+                      "role": "USER",
+                      "created_at": "2025-11-16T10:36:24.660Z",
+                      "profile_picture": "uploads/profile-picture/user-2a65a9ec-8479-40d9-9d50-9557854060aa.jpg"
+                    },
+                    {
+                      "id": "00bb6ad1-2e70-41ca-9713-cc4c70f0d30a",
+                      "username": "User 1",
+                      "email": "user1-fp@pweb-it.id",
+                      "role": "USER",
+                      "created_at": "2025-11-16T10:36:24.598Z",
+                      "profile_picture": "uploads/profile-picture/user-00bb6ad1-2e70-41ca-9713-cc4c70f0d30a.jpg"
+                    },
+                    {
+                      "id": "cf71967c-be73-4455-b3d8-949ffb36c148",
+                      "username": "Atmin IT",
+                      "email": "admin-fp@pweb-it.id",
+                      "role": "ADMIN",
+                      "created_at": "2025-11-16T10:36:24.537Z",
+                      "profile_picture": "uploads/profile-picture/user-cf71967c-be73-4455-b3d8-949ffb36c148.jpg"
+                    },
+                    {
+                      "id": "8b62b33f-4575-42d3-85ce-27c34122143a",
+                      "username": "Kak Super Admin",
+                      "email": "super-admin-fp@pweb-it.id",
+                      "role": "SUPER_ADMIN",
+                      "created_at": "2025-11-16T10:36:24.466Z",
+                      "profile_picture": "uploads/profile-picture/user-8b62b33f-4575-42d3-85ce-27c34122143a.jpg"
+                    }
+                  ],
+                  "meta": {
+                    "total": 4,
+                    "lastPage": 1,
+                    "currentPage": 1,
+                    "perPage": 20,
+                    "prev": null,
+                    "next": null
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user/{user_id}": {
+      "get": {
+        "summary": "Get User Detail",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "2a65a9ec-8479-40d9-9d50-9557854060aa",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 200,
+                      "const": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {}
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "array"
+                              },
+                              {
+                                "type": "object"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ],
+                            "type": "null"
+                          }
+                        }
+                      ]
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/Pagination%20Meta"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Get user detail successfully",
+                  "data": {
+                    "id": "2a65a9ec-8479-40d9-9d50-9557854060aa",
+                    "username": "User 2",
+                    "email": "user2-fp@pweb-it.id",
+                    "role": "USER",
+                    "profile_picture": "uploads/profile-picture/user-2a65a9ec-8479-40d9-9d50-9557854060aa.jpg",
+                    "total_game_played": 0,
+                    "total_game_liked": 0
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update User",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "b8e63e2b-4973-4c9b-b24e-a36abcf80fee",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "John FP Updated"
+                  },
+                  "profile_picture": {
+                    "format": "binary",
+                    "type": "string",
+                    "example": "file://D:\\[1] PICTURES\\NO\\bdr\\hna.jpg"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 200,
+                      "const": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {}
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "array"
+                              },
+                              {
+                                "type": "object"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ],
+                            "type": "null"
+                          }
+                        }
+                      ]
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/Pagination%20Meta"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "User updated successfully",
+                  "data": {
+                    "id": "b8e63e2b-4973-4c9b-b24e-a36abcf80fee",
+                    "email": "john-fp@mail.com",
+                    "username": "John FP Updated",
+                    "role": "USER",
+                    "profile_picture": "uploads/profile-picture/hna_1763322027851.jpg",
+                    "total_game_played": 0,
+                    "created_at": "2025-11-16T19:37:56.991Z"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete User",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "b8e63e2b-4973-4c9b-b24e-a36abcf80fee",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 200,
+                      "const": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {}
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "array"
+                              },
+                              {
+                                "type": "object"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ],
+                            "type": "null"
+                          }
+                        }
+                      ]
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/Pagination%20Meta"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "User deleted successfully"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/game/game-type/quiz": {
+      "post": {
+        "summary": "Create Quiz",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Game/Game List/Quiz"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Quiz tes 3 - apip"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "whoa"
+                  },
+                  "thumbnail_image": {
+                    "format": "binary",
+                    "type": "string",
+                    "example": "file://D:\\[1] PICTURES\\Departemen Meme\\silly_kitty\\Bob.png"
+                  },
+                  "is_publish_immediately": {
+                    "type": "boolean",
+                    "description": "default: false",
+                    "example": "false"
+                  },
+                  "is_question_randomized": {
+                    "type": "boolean",
+                    "description": "default: false",
+                    "example": "true"
+                  },
+                  "is_answer_randomized": {
+                    "type": "boolean",
+                    "description": "default: false",
+                    "example": "false"
+                  },
+                  "score_per_question": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 1000,
+                    "example": 33
+                  },
+                  "files_to_upload": {
+                    "format": "binary",
+                    "type": "string",
+                    "example": [
+                      "file://D:\\[1] PICTURES\\Departemen Meme\\silly_kitty\\Gentleman.png",
+                      "file://D:\\[1] PICTURES\\Departemen Meme\\silly_kitty\\Noopy.png"
+                    ]
+                  },
+                  "questions": {
+                    "description": "max 20 pertanyaan & 10 jawaban per soal",
+                    "type": "string",
+                    "example": "[{\"question_text\":\"1. Siapa saya?\",\"answers\":[{\"answer_text\":\"A. Budi\",\"is_correct\":false},{\"answer_text\":\"B. Bambang\",\"is_correct\":true},{\"answer_text\":\"C. Kucing\",\"is_correct\":false},{\"answer_text\":\"D. Kambing\",\"is_correct\":false}]},{\"question_text\":\"2. Gambar Apa Ini?\",\"question_image_array_index\":0,\"answers\":[{\"answer_text\":\"A. Budi\",\"is_correct\":false},{\"answer_text\":\"B. Bambang\",\"is_correct\":true},{\"answer_text\":\"C. Kucing\",\"is_correct\":false},{\"answer_text\":\"D. Kambing\",\"is_correct\":false}]},{\"question_text\":\"2. Gambar Apa Ini?\",\"question_image_array_index\":1,\"answers\":[{\"answer_text\":\"A. Budi\",\"is_correct\":false},{\"answer_text\":\"B. Bambang\",\"is_correct\":true},{\"answer_text\":\"C. Kucing\",\"is_correct\":false},{\"answer_text\":\"D. Kambing\",\"is_correct\":false}]}]"
+                  }
+                },
+                "required": [
+                  "name",
+                  "thumbnail_image",
+                  "questions"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 201,
+                      "const": 201
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {}
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "array"
+                              },
+                              {
+                                "type": "object"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ],
+                            "type": "null"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 201,
+                  "message": "Quiz created",
+                  "data": {
+                    "id": "3ca41506-4b3b-4fa1-8f77-158272db3b8f"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/game/game-type/quiz/{game_id}": {
+      "get": {
+        "summary": "Get Game Detail",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Game/Game List/Quiz"
+        ],
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "d13a76b0-b779-45ce-b00e-0bcf3957b149",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "thumbnail_image": {
+                          "type": "string"
+                        },
+                        "is_published": {
+                          "type": "boolean"
+                        },
+                        "game_json": {
+                          "type": "object",
+                          "properties": {
+                            "questions": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "answers": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "is_correct": {
+                                          "type": "boolean"
+                                        },
+                                        "answer_text": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "is_correct",
+                                        "answer_text"
+                                      ]
+                                    }
+                                  },
+                                  "question_text": {
+                                    "type": "string"
+                                  },
+                                  "question_image": {
+                                    "type": "string",
+                                    "nullable": true
+                                  }
+                                },
+                                "required": [
+                                  "answers",
+                                  "question_text",
+                                  "question_image"
+                                ]
+                              }
+                            },
+                            "score_per_question": {
+                              "type": "integer"
+                            },
+                            "is_answer_randomized": {
+                              "type": "boolean"
+                            },
+                            "is_question_randomized": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "questions",
+                            "score_per_question",
+                            "is_answer_randomized",
+                            "is_question_randomized"
+                          ]
+                        },
+                        "total_played": {
+                          "type": "integer"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "thumbnail_image",
+                        "is_published",
+                        "game_json",
+                        "total_played",
+                        "created_at"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Get game successfully",
+                  "data": {
+                    "id": "d13a76b0-b779-45ce-b00e-0bcf3957b149",
+                    "name": "Quiz Super Rumit",
+                    "description": "Lorem Ipsum",
+                    "thumbnail_image": "uploads/game/quiz/d13a76b0-b779-45ce-b00e-0bcf3957b149/thumbnail.png",
+                    "is_published": true,
+                    "game_json": {
+                      "questions": [
+                        {
+                          "answers": [
+                            {
+                              "is_correct": false,
+                              "answer_text": "A. Budi"
+                            },
+                            {
+                              "is_correct": true,
+                              "answer_text": "B. Bambang"
+                            },
+                            {
+                              "is_correct": false,
+                              "answer_text": "C. Kucing"
+                            },
+                            {
+                              "is_correct": false,
+                              "answer_text": "D. Kambing"
+                            }
+                          ],
+                          "question_text": "1. Saya Siapa?",
+                          "question_image": null
+                        },
+                        {
+                          "answers": [
+                            {
+                              "is_correct": false,
+                              "answer_text": "A. Budi"
+                            },
+                            {
+                              "is_correct": true,
+                              "answer_text": "B. Bambang"
+                            },
+                            {
+                              "is_correct": false,
+                              "answer_text": "C. Kucing"
+                            },
+                            {
+                              "is_correct": false,
+                              "answer_text": "D. Kambing"
+                            }
+                          ],
+                          "question_text": "2. Ini Gambar Apa?",
+                          "question_image": "uploads/game/quiz/d13a76b0-b779-45ce-b00e-0bcf3957b149/question-1.png"
+                        },
+                        {
+                          "answers": [
+                            {
+                              "is_correct": false,
+                              "answer_text": "A. Budi"
+                            },
+                            {
+                              "is_correct": true,
+                              "answer_text": "B. Bambang"
+                            },
+                            {
+                              "is_correct": false,
+                              "answer_text": "C. Kucing"
+                            },
+                            {
+                              "is_correct": false,
+                              "answer_text": "D. Kambing"
+                            }
+                          ],
+                          "question_text": "3. 1 + 1 = ?",
+                          "question_image": "uploads/game/quiz/d13a76b0-b779-45ce-b00e-0bcf3957b149/question-2.png"
+                        }
+                      ],
+                      "score_per_question": 33,
+                      "is_answer_randomized": false,
+                      "is_question_randomized": true
+                    },
+                    "total_played": 0,
+                    "created_at": "2025-11-17T04:53:17.490Z"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update Quiz",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Game/Game List/Quiz"
+        ],
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "196adfde-18ab-4491-8a91-4054b317428b",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Quiz tes 3 - edited"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "whoa edited"
+                  },
+                  "thumbnail_image": {
+                    "type": "string",
+                    "format": "binary",
+                    "example": "file://D:\\[1] PICTURES\\Departemen Meme\\silly_kitty\\Ah_So_Cat.png"
+                  },
+                  "is_publish": {
+                    "description": "bisa buat update status quiz juga",
+                    "type": "boolean",
+                    "example": "true"
+                  },
+                  "is_question_randomized": {
+                    "type": "boolean",
+                    "example": "true"
+                  },
+                  "is_answer_randomized": {
+                    "type": "boolean",
+                    "example": "false"
+                  },
+                  "score_per_question": {
+                    "type": "integer",
+                    "example": 33
+                  },
+                  "files_to_upload": {
+                    "type": "string",
+                    "format": "binary",
+                    "example": [
+                      "file://D:\\[1] PICTURES\\Departemen Meme\\silly_kitty\\dog.jpg",
+                      "file://D:\\[1] PICTURES\\Departemen Meme\\silly_kitty\\linux_gato.jpg"
+                    ]
+                  },
+                  "questions": {
+                    "description": "max 20 pertanyaan & 10 jawaban per soal. Kalau mau update questions butuh kirim ulang semua questions. kalau misal question_image nda berubah, field question_image_array_index diisi string filepath yang sudah ada",
+                    "type": "string",
+                    "example": "[{\"question_text\":\"1. Siapa saya?\",\"answers\":[{\"answer_text\":\"A. Budi\",\"is_correct\":false},{\"answer_text\":\"B. Bambang\",\"is_correct\":true},{\"answer_text\":\"C. Kucing\",\"is_correct\":false},{\"answer_text\":\"D. Kambing\",\"is_correct\":false}]},{\"question_text\":\"2. Gambar Apa Ini?\",\"question_image_array_index\":0,\"answers\":[{\"answer_text\":\"A. Budi\",\"is_correct\":false},{\"answer_text\":\"B. Bambang\",\"is_correct\":true},{\"answer_text\":\"C. Kucing\",\"is_correct\":false},{\"answer_text\":\"D. Kambing\",\"is_correct\":false}]},{\"question_text\":\"2. Gambar Apa Ini?\",\"question_image_array_index\":1,\"answers\":[{\"answer_text\":\"A. Budi\",\"is_correct\":false},{\"answer_text\":\"B. Bambang\",\"is_correct\":true},{\"answer_text\":\"C. Kucing\",\"is_correct\":false},{\"answer_text\":\"D. Kambing\",\"is_correct\":false}]}]"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Quiz updated",
+                  "data": {
+                    "id": "5c204297-5c28-4a61-9913-7ee100107409"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete Jeopardy Game",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "beeb7da9-623d-4cde-9ab1-87f644580aff",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Quiz deleted successfully",
+                  "data": {
+                    "id": "beeb7da9-623d-4cde-9ab1-87f644580aff"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/game/game-type/quiz/{game_id}/play/public": {
+      "get": {
+        "summary": "Play Game - Public",
+        "deprecated": false,
+        "description": "Lewat endpoint ini, field is_correct nda akan ditampilkan, question & answer juga akan dirandom kalau disetting random. Return error 404 kalau is_published === false",
+        "tags": [
+          "Game/Game List/Quiz"
+        ],
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "196adfde-18ab-4491-8a91-4054b317428b",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "thumbnail_image": {
+                          "type": "string"
+                        },
+                        "score_per_question": {
+                          "type": "integer"
+                        },
+                        "questions": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "question_text": {
+                                "type": "string"
+                              },
+                              "question_image": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "question_index": {
+                                "type": "integer"
+                              },
+                              "answers": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "answer_text": {
+                                      "type": "string"
+                                    },
+                                    "answer_index": {
+                                      "type": "integer"
+                                    }
+                                  },
+                                  "required": [
+                                    "answer_text",
+                                    "answer_index"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "question_text",
+                              "question_image",
+                              "question_index",
+                              "answers"
+                            ]
+                          }
+                        },
+                        "is_published": {
+                          "type": "boolean",
+                          "default": true
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "thumbnail_image",
+                        "score_per_question",
+                        "questions",
+                        "is_published"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Get public game successfully",
+                  "data": {
+                    "id": "196adfde-18ab-4491-8a91-4054b317428b",
+                    "name": "Quiz tes 2 - apip",
+                    "description": "whoa",
+                    "thumbnail_image": "uploads/game/quiz/196adfde-18ab-4491-8a91-4054b317428b/Bob_1763904604448.png",
+                    "score_per_question": 33,
+                    "questions": [
+                      {
+                        "question_text": "2. Gambar Apa Ini?",
+                        "question_image": null,
+                        "question_index": 1,
+                        "answers": [
+                          {
+                            "answer_text": "A. Budi",
+                            "answer_index": 0
+                          },
+                          {
+                            "answer_text": "B. Bambang",
+                            "answer_index": 1
+                          },
+                          {
+                            "answer_text": "C. Kucing",
+                            "answer_index": 2
+                          },
+                          {
+                            "answer_text": "D. Kambing",
+                            "answer_index": 3
+                          }
+                        ]
+                      },
+                      {
+                        "question_text": "1. Siapa saya?",
+                        "question_image": null,
+                        "question_index": 0,
+                        "answers": [
+                          {
+                            "answer_text": "A. Budi",
+                            "answer_index": 0
+                          },
+                          {
+                            "answer_text": "B. Bambang",
+                            "answer_index": 1
+                          },
+                          {
+                            "answer_text": "C. Kucing",
+                            "answer_index": 2
+                          },
+                          {
+                            "answer_text": "D. Kambing",
+                            "answer_index": 3
+                          }
+                        ]
+                      },
+                      {
+                        "question_text": "2. Gambar Apa Ini?",
+                        "question_image": "uploads/game/quiz/196adfde-18ab-4491-8a91-4054b317428b/Noopy_1763904604453.png",
+                        "question_index": 2,
+                        "answers": [
+                          {
+                            "answer_text": "A. Budi",
+                            "answer_index": 0
+                          },
+                          {
+                            "answer_text": "B. Bambang",
+                            "answer_index": 1
+                          },
+                          {
+                            "answer_text": "C. Kucing",
+                            "answer_index": 2
+                          },
+                          {
+                            "answer_text": "D. Kambing",
+                            "answer_index": 3
+                          }
+                        ]
+                      }
+                    ],
+                    "is_published": true
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/game/game-type/quiz/{game_id}/play/private": {
+      "get": {
+        "summary": "Play Game - Private",
+        "deprecated": false,
+        "description": "untuk preview game sebelum dipublish (kalau ada)",
+        "tags": [
+          "Game/Game List/Quiz"
+        ],
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "description": "bedanya sama public, ini cuma bisa diakses owner / super admin. return 404 kalau not published",
+            "required": true,
+            "example": "196adfde-18ab-4491-8a91-4054b317428b",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 200,
+                      "const": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "thumbnail_image": {
+                          "type": "string"
+                        },
+                        "score_per_question": {
+                          "type": "integer"
+                        },
+                        "questions": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "question_text": {
+                                "type": "string"
+                              },
+                              "question_image": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "question_index": {
+                                "type": "integer"
+                              },
+                              "answers": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "answer_text": {
+                                      "type": "string"
+                                    },
+                                    "answer_index": {
+                                      "type": "integer"
+                                    }
+                                  },
+                                  "required": [
+                                    "answer_text",
+                                    "answer_index"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "question_text",
+                              "question_image",
+                              "question_index",
+                              "answers"
+                            ]
+                          }
+                        },
+                        "is_published": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "thumbnail_image",
+                        "score_per_question",
+                        "questions",
+                        "is_published"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Get private game successfully",
+                  "data": {
+                    "id": "196adfde-18ab-4491-8a91-4054b317428b",
+                    "name": "Quiz tes 2 - apip",
+                    "description": "whoa",
+                    "thumbnail_image": "uploads/game/quiz/196adfde-18ab-4491-8a91-4054b317428b/Bob_1763904604448.png",
+                    "score_per_question": 33,
+                    "questions": [
+                      {
+                        "question_text": "2. Gambar Apa Ini?",
+                        "question_image": "uploads/game/quiz/196adfde-18ab-4491-8a91-4054b317428b/Noopy_1763904604453.png",
+                        "question_index": 2,
+                        "answers": [
+                          {
+                            "answer_text": "A. Budi",
+                            "answer_index": 0
+                          },
+                          {
+                            "answer_text": "B. Bambang",
+                            "answer_index": 1
+                          },
+                          {
+                            "answer_text": "C. Kucing",
+                            "answer_index": 2
+                          },
+                          {
+                            "answer_text": "D. Kambing",
+                            "answer_index": 3
+                          }
+                        ]
+                      },
+                      {
+                        "question_text": "2. Gambar Apa Ini?",
+                        "question_image": null,
+                        "question_index": 1,
+                        "answers": [
+                          {
+                            "answer_text": "A. Budi",
+                            "answer_index": 0
+                          },
+                          {
+                            "answer_text": "B. Bambang",
+                            "answer_index": 1
+                          },
+                          {
+                            "answer_text": "C. Kucing",
+                            "answer_index": 2
+                          },
+                          {
+                            "answer_text": "D. Kambing",
+                            "answer_index": 3
+                          }
+                        ]
+                      },
+                      {
+                        "question_text": "1. Siapa saya?",
+                        "question_image": null,
+                        "question_index": 0,
+                        "answers": [
+                          {
+                            "answer_text": "A. Budi",
+                            "answer_index": 0
+                          },
+                          {
+                            "answer_text": "B. Bambang",
+                            "answer_index": 1
+                          },
+                          {
+                            "answer_text": "C. Kucing",
+                            "answer_index": 2
+                          },
+                          {
+                            "answer_text": "D. Kambing",
+                            "answer_index": 3
+                          }
+                        ]
+                      }
+                    ],
+                    "is_published": true
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/game/game-type/quiz/{game_id}/check": {
+      "post": {
+        "summary": "Evaluate Quiz Answer",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Game/Game List/Quiz"
+        ],
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "d13a76b0-b779-45ce-b00e-0bcf3957b149",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": {
+                "answers": [
+                  {
+                    "question_index": 0,
+                    "selected_answer_index": 0
+                  },
+                  {
+                    "question_index": 1,
+                    "selected_answer_index": 1
+                  },
+                  {
+                    "question_index": 2,
+                    "selected_answer_index": 1
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 200,
+                      "const": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {}
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "array"
+                              },
+                              {
+                                "type": "object"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ],
+                            "type": "null"
+                          }
+                        }
+                      ]
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/Pagination%20Meta"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message"
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/game/game-type/jeopardy": {
+      "post": {
+        "summary": "Create Jeopardy Game",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "My Jeopardy Game",
+                    "type": "string"
+                  },
+                  "description": {
+                    "example": "A fun game",
+                    "type": "string"
+                  },
+                  "thumbnail_image": {
+                    "format": "binary",
+                    "type": "string",
+                    "example": "file://E:\\my-knowledge-base\\1_Projects\\university-its\\semester-3\\et234305-pemrograman-web\\final-project\\FP-PemrogramanWebsite-BE-2025-C10\\prisma\\seeder\\data\\images\\Bob.png"
+                  },
+                  "is_publish_immediately": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "default: false",
+                    "example": "false"
+                  },
+                  "settings": {
+                    "description": "JSON String of settings",
+                    "example": "{  \"time_limit_per_clue\": 30,  \"allow_daily_double\": true,  \"double_jeopardy_multiplier\": 2,  \"max_teams\": 4,  \"starting_score\": 0}",
+                    "type": "string"
+                  },
+                  "rounds": {
+                    "description": "JSON String of rounds",
+                    "example": "[  {    \"type\": \"jeopardy\",    \"name\": \"Round 1\",    \"categories\": [      {        \"title\": \"General Knowledge\",        \"clues\": [          {            \"question\": \"What is the capital of Indonesia?\",            \"answer\": \"Jakarta\",            \"value\": 200,            \"is_daily_double\": false          },          {            \"question\": \"Which planet is known as the Red Planet?\",            \"answer\": \"Mars\",            \"value\": 400,            \"is_daily_double\": true          }        ]      },      {        \"title\": \"Tech\",        \"clues\": [          {            \"question\": \"What does CPU stand for?\",            \"answer\": \"Central Processing Unit\",            \"value\": 200,            \"is_daily_double\": false          }        ]      }    ]  }]",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "thumbnail_image",
+                  "settings",
+                  "rounds"
+                ]
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 201,
+                  "message": "Jeopardy game created",
+                  "data": {
+                    "id": "beeb7da9-623d-4cde-9ab1-87f644580aff"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/game/game-type/jeopardy/{game_id}": {
+      "get": {
+        "summary": "Get Game Detail",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "beeb7da9-623d-4cde-9ab1-87f644580aff",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Get game successfully",
+                  "data": {
+                    "id": "beeb7da9-623d-4cde-9ab1-87f644580aff",
+                    "name": "My Jeopardy Game",
+                    "description": "A fun game",
+                    "thumbnail_image": "uploads/game/jeopardy/beeb7da9-623d-4cde-9ab1-87f644580aff/Bob_1765499277417.png",
+                    "is_published": false,
+                    "created_at": "2025-12-12T00:27:57.427Z",
+                    "game_json": {
+                      "rounds": [
+                        {
+                          "id": "round-01",
+                          "name": "Round 1",
+                          "type": "jeopardy",
+                          "order": 0,
+                          "categories": [
+                            {
+                              "id": "cat-01-01",
+                              "clues": [
+                                {
+                                  "id": "clue-01-01-01",
+                                  "value": 200,
+                                  "answer": "Jakarta",
+                                  "question": "What is the capital of Indonesia?",
+                                  "media_url": null,
+                                  "is_daily_double": false
+                                },
+                                {
+                                  "id": "clue-01-01-02",
+                                  "value": 400,
+                                  "answer": "Mars",
+                                  "question": "Which planet is known as the Red Planet?",
+                                  "media_url": null,
+                                  "is_daily_double": true
+                                }
+                              ],
+                              "order": 0,
+                              "title": "General Knowledge"
+                            },
+                            {
+                              "id": "cat-01-02",
+                              "clues": [
+                                {
+                                  "id": "clue-01-02-01",
+                                  "value": 200,
+                                  "answer": "Central Processing Unit",
+                                  "question": "What does CPU stand for?",
+                                  "media_url": null,
+                                  "is_daily_double": false
+                                }
+                              ],
+                              "order": 1,
+                              "title": "Tech"
+                            }
+                          ]
+                        }
+                      ],
+                      "settings": {
+                        "max_teams": 4,
+                        "starting_score": 0,
+                        "allow_daily_double": true,
+                        "time_limit_per_clue": 30,
+                        "double_jeopardy_multiplier": 2
+                      }
+                    },
+                    "total_played": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update Jeopardy",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "beeb7da9-623d-4cde-9ab1-87f644580aff",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "encoding": {
+                "name": {
+                  "contentType": "te"
+                }
+              },
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The new name of the game (max 128 chars).",
+                    "example": "This is a Brand New Jeopardy Game",
+                    "type": "string"
+                  },
+                  "description": {
+                    "description": "A new description (max 256 chars).",
+                    "example": "This is a New Description of the Game",
+                    "type": "string"
+                  },
+                  "is_publish": {
+                    "type": "boolean",
+                    "description": "Set to \"true\" to publish or \"false\" to unpublish.",
+                    "example": "false"
+                  },
+                  "thumbnail_image": {
+                    "format": "binary",
+                    "type": "string",
+                    "description": "Upload a new cover image (replaces the old one).",
+                    "example": "file://E:\\my-knowledge-base\\1_Projects\\university-its\\semester-3\\et234305-pemrograman-web\\final-project\\FP-PemrogramanWebsite-BE-2025-C10\\prisma\\seeder\\data\\images\\default_image.jpg"
+                  },
+                  "settings": {
+                    "description": "A JSON String containing the game rules (see below).",
+                    "example": "{  \"time_limit_per_clue\": 30,  \"allow_daily_double\": true,  \"double_jeopardy_multiplier\": 2,  \"max_teams\": 4,  \"starting_score\": 0}",
+                    "type": "string"
+                  },
+                  "rounds": {
+                    "description": "A JSON String containing the updated game board (see below).",
+                    "example": "[  {    \"type\": \"jeopardy\",    \"name\": \"Round 1\",    \"categories\": [      {        \"title\": \"History\",        \"clues\": [          {            \"question\": \"First President?\",            \"answer\": \"Soekarno\",            \"value\": 200,            \"is_daily_double\": false          }        ]      }    ]  }]",
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Jeopardy game updated",
+                  "data": {
+                    "id": "beeb7da9-623d-4cde-9ab1-87f644580aff"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/game/game-type/jeopardy/{game_id}/play/public": {
+      "get": {
+        "summary": "Play Game - Public",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "beeb7da9-623d-4cde-9ab1-87f644580aff",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Get public game successfully",
+                  "data": {
+                    "id": "beeb7da9-623d-4cde-9ab1-87f644580aff",
+                    "name": "This is a Brand New Jeopardy Game",
+                    "description": "This is a New Description of the Game",
+                    "thumbnail_image": "uploads/game/jeopardy/beeb7da9-623d-4cde-9ab1-87f644580aff/default_image_1765507711238.jpg",
+                    "is_published": true,
+                    "settings": {
+                      "max_teams": 4,
+                      "starting_score": 0,
+                      "allow_daily_double": true,
+                      "time_limit_per_clue": 30,
+                      "double_jeopardy_multiplier": 2
+                    },
+                    "rounds": [
+                      {
+                        "id": "round-01",
+                        "name": "Round 1",
+                        "type": "jeopardy",
+                        "order": 0,
+                        "categories": [
+                          {
+                            "id": "cat-01-01",
+                            "clues": [
+                              {
+                                "id": "clue-01-01-01",
+                                "value": 200,
+                                "answer": "Soekarno",
+                                "question": "First President?",
+                                "media_url": null,
+                                "is_daily_double": false
+                              }
+                            ],
+                            "order": 0,
+                            "title": "History"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/game/game-type/jeopardy/{game_id}/play/private": {
+      "get": {
+        "summary": "Play Game - Private",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "beeb7da9-623d-4cde-9ab1-87f644580aff",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Get private game successfully",
+                  "data": {
+                    "id": "beeb7da9-623d-4cde-9ab1-87f644580aff",
+                    "name": "This is a Brand New Jeopardy Game",
+                    "description": "This is a New Description of the Game",
+                    "thumbnail_image": "uploads/game/jeopardy/beeb7da9-623d-4cde-9ab1-87f644580aff/default_image_1765506657120.jpg",
+                    "is_published": false,
+                    "settings": {
+                      "max_teams": 4,
+                      "starting_score": 0,
+                      "allow_daily_double": true,
+                      "time_limit_per_clue": 30,
+                      "double_jeopardy_multiplier": 2
+                    },
+                    "rounds": [
+                      {
+                        "id": "round-01",
+                        "name": "Round 1",
+                        "type": "jeopardy",
+                        "order": 0,
+                        "categories": [
+                          {
+                            "id": "cat-01-01",
+                            "clues": [
+                              {
+                                "id": "clue-01-01-01",
+                                "value": 200,
+                                "answer": "Soekarno",
+                                "question": "First President?",
+                                "media_url": null,
+                                "is_daily_double": false
+                              }
+                            ],
+                            "order": 0,
+                            "title": "History"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/game/game-type/jeopardy/{game_id}/end": {
+      "post": {
+        "summary": "End Jeopardy Game",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "beeb7da9-623d-4cde-9ab1-87f644580aff",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Game finished successfully"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/game": {
+      "get": {
+        "summary": "Get All Game - Public",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Game"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "gameTypeSlug",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "quiz",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderByName",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "asc",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "orderByCreatedAt",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "desc",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "orderByLikeAmount",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "asc",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "orderByPlayAmount",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "desc",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 200,
+                      "const": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {}
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "array"
+                              },
+                              {
+                                "type": "object"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ],
+                            "type": "null"
+                          }
+                        }
+                      ]
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/Pagination%20Meta"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success - Auth",
+                    "value": {
+                      "success": true,
+                      "statusCode": 200,
+                      "message": "Get all game successfully",
+                      "data": [
+                        {
+                          "id": "196adfde-18ab-4491-8a91-4054b317428b",
+                          "name": "Quiz tes 2 - apip",
+                          "description": "whoa",
+                          "thumbnail_image": "uploads/game/quiz/196adfde-18ab-4491-8a91-4054b317428b/Bob_1763904604448.png",
+                          "total_played": 3,
+                          "game_template": "quiz",
+                          "creator_id": "8b62b33f-4575-42d3-85ce-27c34122143a",
+                          "creator_name": "Kak Super Admin",
+                          "is_game_liked": true,
+                          "total_liked": 1
+                        },
+                        {
+                          "id": "d13a76b0-b779-45ce-b00e-0bcf3957b149",
+                          "name": "Quiz Super Rumit",
+                          "description": "Lorem Ipsum",
+                          "thumbnail_image": "uploads/game/quiz/d13a76b0-b779-45ce-b00e-0bcf3957b149/thumbnail.png",
+                          "total_played": 0,
+                          "game_template": "quiz",
+                          "creator_id": "8b62b33f-4575-42d3-85ce-27c34122143a",
+                          "creator_name": "Kak Super Admin",
+                          "is_game_liked": false,
+                          "total_liked": 0
+                        }
+                      ],
+                      "meta": {
+                        "total": 2,
+                        "lastPage": 1,
+                        "currentPage": 1,
+                        "perPage": 20,
+                        "prev": null,
+                        "next": null
+                      }
+                    }
+                  },
+                  "2": {
+                    "summary": "Success - No Auth",
+                    "value": {
+                      "success": true,
+                      "statusCode": 200,
+                      "message": "Get all game successfully",
+                      "data": [
+                        {
+                          "id": "196adfde-18ab-4491-8a91-4054b317428b",
+                          "name": "Quiz tes 2 - apip",
+                          "description": "whoa",
+                          "thumbnail_image": "uploads/game/quiz/196adfde-18ab-4491-8a91-4054b317428b/Bob_1763904604448.png",
+                          "total_played": 3,
+                          "game_template": "quiz",
+                          "creator_id": "8b62b33f-4575-42d3-85ce-27c34122143a",
+                          "creator_name": "Kak Super Admin",
+                          "total_liked": 1
+                        },
+                        {
+                          "id": "d13a76b0-b779-45ce-b00e-0bcf3957b149",
+                          "name": "Quiz Super Rumit",
+                          "description": "Lorem Ipsum",
+                          "thumbnail_image": "uploads/game/quiz/d13a76b0-b779-45ce-b00e-0bcf3957b149/thumbnail.png",
+                          "total_played": 0,
+                          "game_template": "quiz",
+                          "creator_id": "8b62b33f-4575-42d3-85ce-27c34122143a",
+                          "creator_name": "Kak Super Admin",
+                          "total_liked": 0
+                        }
+                      ],
+                      "meta": {
+                        "total": 2,
+                        "lastPage": 1,
+                        "currentPage": 1,
+                        "perPage": 20,
+                        "prev": null,
+                        "next": null
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update Game Status",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Game"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": {
+                "game_id": "196adfde-18ab-4491-8a91-4054b317428b",
+                "is_publish": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "is_published": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "is_published"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Game publish status updated successfully",
+                  "data": {
+                    "is_published": true
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/game/private": {
+      "get": {
+        "summary": "Get All Game - Private",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Game"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": 0,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": 0,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "gameTypeSlug",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderByName",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "asc",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderByCreatedAt",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "desc",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderByLikeAmount",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "asc",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderByPlayAmount",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "desc",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 200,
+                      "const": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {}
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "array"
+                              },
+                              {
+                                "type": "object"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ],
+                            "type": "null"
+                          }
+                        }
+                      ]
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/Pagination%20Meta"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Get all game (private) successfully",
+                  "data": [
+                    {
+                      "id": "196adfde-18ab-4491-8a91-4054b317428b",
+                      "name": "Quiz tes 2 - apip",
+                      "description": "whoa",
+                      "thumbnail_image": "uploads/game/quiz/196adfde-18ab-4491-8a91-4054b317428b/Bob_1763904604448.png",
+                      "total_played": 3,
+                      "is_published": true,
+                      "game_template": "quiz",
+                      "creator_id": "8b62b33f-4575-42d3-85ce-27c34122143a",
+                      "creator_name": "Kak Super Admin",
+                      "is_game_liked": true,
+                      "total_liked": 1
+                    },
+                    {
+                      "id": "3f9d67e1-e2ce-41cf-90ae-d69479b7174e",
+                      "name": "Quiz tes 1 - apip",
+                      "description": "whoa",
+                      "thumbnail_image": "uploads/game/quiz/3f9d67e1-e2ce-41cf-90ae-d69479b7174e/Bob_1763904533069.png",
+                      "total_played": 0,
+                      "is_published": false,
+                      "game_template": "quiz",
+                      "creator_id": "8b62b33f-4575-42d3-85ce-27c34122143a",
+                      "creator_name": "Kak Super Admin",
+                      "is_game_liked": false,
+                      "total_liked": 0
+                    },
+                    {
+                      "id": "d13a76b0-b779-45ce-b00e-0bcf3957b149",
+                      "name": "Quiz Super Rumit",
+                      "description": "Lorem Ipsum",
+                      "thumbnail_image": "uploads/game/quiz/d13a76b0-b779-45ce-b00e-0bcf3957b149/thumbnail.png",
+                      "total_played": 0,
+                      "is_published": true,
+                      "game_template": "quiz",
+                      "creator_id": "8b62b33f-4575-42d3-85ce-27c34122143a",
+                      "creator_name": "Kak Super Admin",
+                      "is_game_liked": false,
+                      "total_liked": 0
+                    }
+                  ],
+                  "meta": {
+                    "total": 3,
+                    "lastPage": 1,
+                    "currentPage": 1,
+                    "perPage": 20,
+                    "prev": null,
+                    "next": null
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/game/user/{user_id}": {
+      "get": {
+        "summary": "Get User's Public Game",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Game"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "8b62b33f-4575-42d3-85ce-27c34122143a",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": 0,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": 0,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "gameTypeSlug",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderByName",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "asc",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderByCreatedAt",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "desc",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderByLikeAmount",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "asc",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderByPlayAmount",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "desc",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 200,
+                      "const": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {}
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "array"
+                              },
+                              {
+                                "type": "object"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ],
+                            "type": "null"
+                          }
+                        }
+                      ]
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/Pagination%20Meta"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success - No Auth",
+                    "value": {
+                      "success": true,
+                      "statusCode": 200,
+                      "message": "Get all user game successfully",
+                      "data": [
+                        {
+                          "id": "196adfde-18ab-4491-8a91-4054b317428b",
+                          "name": "Quiz tes 2 - apip",
+                          "description": "whoa",
+                          "thumbnail_image": "uploads/game/quiz/196adfde-18ab-4491-8a91-4054b317428b/Bob_1763904604448.png",
+                          "total_played": 3,
+                          "game_template": "quiz",
+                          "total_liked": 1
+                        },
+                        {
+                          "id": "d13a76b0-b779-45ce-b00e-0bcf3957b149",
+                          "name": "Quiz Super Rumit",
+                          "description": "Lorem Ipsum",
+                          "thumbnail_image": "uploads/game/quiz/d13a76b0-b779-45ce-b00e-0bcf3957b149/thumbnail.png",
+                          "total_played": 0,
+                          "game_template": "quiz",
+                          "total_liked": 0
+                        }
+                      ],
+                      "meta": {
+                        "total": 2,
+                        "lastPage": 1,
+                        "currentPage": 1,
+                        "perPage": 20,
+                        "prev": null,
+                        "next": null
+                      }
+                    }
+                  },
+                  "2": {
+                    "summary": "Success - Auth",
+                    "value": {
+                      "success": true,
+                      "statusCode": 200,
+                      "message": "Get all user game successfully",
+                      "data": [
+                        {
+                          "id": "196adfde-18ab-4491-8a91-4054b317428b",
+                          "name": "Quiz tes 2 - apip",
+                          "description": "whoa",
+                          "thumbnail_image": "uploads/game/quiz/196adfde-18ab-4491-8a91-4054b317428b/Bob_1763904604448.png",
+                          "total_played": 3,
+                          "game_template": "quiz",
+                          "is_game_liked": true,
+                          "total_liked": 1
+                        },
+                        {
+                          "id": "d13a76b0-b779-45ce-b00e-0bcf3957b149",
+                          "name": "Quiz Super Rumit",
+                          "description": "Lorem Ipsum",
+                          "thumbnail_image": "uploads/game/quiz/d13a76b0-b779-45ce-b00e-0bcf3957b149/thumbnail.png",
+                          "total_played": 0,
+                          "game_template": "quiz",
+                          "is_game_liked": false,
+                          "total_liked": 0
+                        }
+                      ],
+                      "meta": {
+                        "total": 2,
+                        "lastPage": 1,
+                        "currentPage": 1,
+                        "perPage": 20,
+                        "prev": null,
+                        "next": null
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/game/template": {
+      "get": {
+        "summary": "Get All Game template",
+        "deprecated": false,
+        "description": "logo dari game template merupakan parameter 'name' dari DynamicIcon Lucid React\n\n```typescript\nimport { DynamicIcon } from 'lucide-react/dynamic';\n\nconst TEMPLATE_LOGO = \"book-a\" // dari data[index].logo\n\nconst App = () => (\n  <DynamicIcon name={TEMPLATE_LOGO} color=\"red\" size={48} />\n);\n```",
+        "tags": [
+          "Game"
+        ],
+        "parameters": [
+          {
+            "name": "lite",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "true",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "withLifeLimit",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "withTimeLimit",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 200,
+                      "const": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {}
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "array"
+                              },
+                              {
+                                "type": "object"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ],
+                            "type": "null"
+                          }
+                        }
+                      ]
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/Pagination%20Meta"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success - Full",
+                    "value": {
+                      "success": true,
+                      "statusCode": 200,
+                      "message": "Get all game template successfully",
+                      "data": [
+                        {
+                          "slug": "quiz",
+                          "name": "Quiz",
+                          "logo": "atom",
+                          "id": "d7d8399a-8a98-44f3-a665-ed03a6b9a5d0",
+                          "description": "Create a multiple choice Game",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "anagram",
+                          "name": "Anagram",
+                          "logo": "book-a",
+                          "id": "8fcc856e-4366-4275-802f-2cda5e010183",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "spin-the-wheel",
+                          "name": "Spin the Wheel",
+                          "logo": "disc-3",
+                          "id": "0eabc2f1-0119-48f4-84e8-2e9a2375757c",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "open-the-box",
+                          "name": "Open the Box",
+                          "logo": "archive-restore",
+                          "id": "1c6f82ad-3f6f-4a98-8fb9-e52fcb1cce84",
+                          "description": "Lorem",
+                          "is_time_limit_based": true,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "unjumble",
+                          "name": "Unjumble",
+                          "logo": "combine",
+                          "id": "80075968-6986-4980-a735-d76a287cf78d",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "matching-pair",
+                          "name": "Matching Pair",
+                          "logo": "users",
+                          "id": "29d219ad-abc3-4cbc-8f60-d2b1d06efeff",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "match-up",
+                          "name": "Match Up",
+                          "logo": "table",
+                          "id": "d97887a7-63bf-47ab-8531-38d3c44943fb",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "flash-cards",
+                          "name": "Flash Cards",
+                          "logo": "sticker",
+                          "id": "83eef1fb-e8eb-4b57-b62a-d032d33ba3b6",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "find-the-match",
+                          "name": "Find the Match",
+                          "logo": "square-activity",
+                          "id": "364db0b7-8116-46c1-8a86-f62ca7c1e9a4",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": true
+                        },
+                        {
+                          "slug": "group-sort",
+                          "name": "Group Sort",
+                          "logo": "square-stack",
+                          "id": "04f5c7f1-fdd3-485b-b43f-478f4888ed68",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "complete-the-sentence",
+                          "name": "Complete the Sentence",
+                          "logo": "rectangle-ellipsis",
+                          "id": "14add151-bda7-4473-bed5-552027c8ca1e",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "speaking-cards",
+                          "name": "Speaking Cards",
+                          "logo": "speech",
+                          "id": "7a716582-a686-41fc-b3ef-48c3dd30b57b",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "word-search",
+                          "name": "Word Search",
+                          "logo": "text-search",
+                          "id": "785e62e3-fc58-4cbd-9ffe-c0063c0c1207",
+                          "description": "Lorem",
+                          "is_time_limit_based": true,
+                          "is_life_based": true
+                        },
+                        {
+                          "slug": "gameshow-quiz",
+                          "name": "Gameshow Quiz",
+                          "logo": "theater",
+                          "id": "a67b668c-e95d-483e-8d4e-385b050f5646",
+                          "description": "Lorem",
+                          "is_time_limit_based": true,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "maze-chase",
+                          "name": "Maze Chase",
+                          "logo": "gamepad-directional",
+                          "id": "945328c2-a578-4a62-af7d-4ef93ee000e3",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": true
+                        },
+                        {
+                          "slug": "crossword",
+                          "name": "Crossword",
+                          "logo": "panels-right-bottom",
+                          "id": "87338387-b0cc-462e-9489-a0070f98c3a1",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "labelled-diagram",
+                          "name": "Labelled Diagram",
+                          "logo": "pin",
+                          "id": "a2678379-5c86-4f05-a10a-f37370732e1d",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "true-or-false",
+                          "name": "True or False",
+                          "logo": "book-open-check",
+                          "id": "ac8b43c2-1bee-4a3f-a9ad-b8aa6f8a8d10",
+                          "description": "Lorem",
+                          "is_time_limit_based": true,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "hangman",
+                          "name": "Hangman",
+                          "logo": "skull",
+                          "id": "374043f0-8c5c-4c0e-9985-cb8e2ef68936",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": true
+                        },
+                        {
+                          "slug": "airplane",
+                          "name": "Airplane",
+                          "logo": "plane",
+                          "id": "a947e0b8-f3f1-4c20-af14-63ac04c8ed8d",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": true
+                        },
+                        {
+                          "slug": "whack-a-mole",
+                          "name": "Whack-a-Mole",
+                          "logo": "gavel",
+                          "id": "9803ce6b-8d0c-47fe-8306-9411e3399665",
+                          "description": "Lorem",
+                          "is_time_limit_based": true,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "baloon-pop",
+                          "name": "Baloon Pop",
+                          "logo": "bow-arrow",
+                          "id": "9d13d300-fe45-4fa3-88d3-4f944e1a7f01",
+                          "description": "Lorem",
+                          "is_time_limit_based": true,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "image-quiz",
+                          "name": "Image Quiz",
+                          "logo": "aperture",
+                          "id": "b7efa7d0-fe73-4a5b-80d8-953cee5a39dc",
+                          "description": "Lorem",
+                          "is_time_limit_based": true,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "flip-tiles",
+                          "name": "Flip Tiles",
+                          "logo": "copy-slash",
+                          "id": "665a54ee-1920-4d00-a593-c79ee8b738fa",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "rank-order",
+                          "name": "Rank Order",
+                          "logo": "list-collapse",
+                          "id": "ec1fdf17-7935-4da9-a346-7bfd887fb56c",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "win-or-lose-quiz",
+                          "name": "Win or Lose Quiz",
+                          "logo": "spade",
+                          "id": "246e89e4-081e-4aae-b202-56c7a8c44e8f",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "watch-and-memorize",
+                          "name": "Watch and Memorize",
+                          "logo": "brain",
+                          "id": "6a7e3503-6faa-4d61-ab14-01b868fd1c70",
+                          "description": "Lorem",
+                          "is_time_limit_based": true,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "word-magnet",
+                          "name": "Word Magnet",
+                          "logo": "magnet",
+                          "id": "2614daa4-efec-46b2-a95a-ee5651578465",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "flying-fruit",
+                          "name": "Flying Fruit",
+                          "logo": "citrus",
+                          "id": "6dd614dc-bdcd-4cf9-a8d4-a98f497b39ec",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": true
+                        },
+                        {
+                          "slug": "math-generator",
+                          "name": "Math Generator",
+                          "logo": "sigma",
+                          "id": "474d18da-c038-4ca6-b6b2-2c88fff6a006",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "pair-or-no-pair",
+                          "name": "pair or No Pair",
+                          "logo": "grid-2x2-x",
+                          "id": "b8b126af-011f-49f8-8616-ec8ed9180e33",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "speed-sorting",
+                          "name": "Speed Sorting",
+                          "logo": "clock-arrow-down",
+                          "id": "ba2f6e6a-ca73-472f-a227-69a6e861f754",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "spell-the-word",
+                          "name": "Spell the Word",
+                          "logo": "megaphone",
+                          "id": "2bdeb39e-9041-4997-992b-eeeb82f03894",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "type-the-answer",
+                          "name": "Type the Answer",
+                          "logo": "text-cursor-input",
+                          "id": "cc7634f2-ddd9-450e-a0c7-7e80c7cd206d",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "jeopardy",
+                          "name": "Jeopardy",
+                          "logo": "spotlight",
+                          "id": "c3d8a6c3-0db2-4b01-ae77-31e8af182784",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "puzzle",
+                          "name": "Puzzle",
+                          "logo": "puzzle",
+                          "id": "06415ea7-d932-4b10-a285-f53201edf108",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "sliding-puzzle",
+                          "name": "Sliding Puzzle",
+                          "logo": "images",
+                          "id": "9fdcf0f2-9b09-4cac-b648-b349c5c07388",
+                          "description": "Lorem",
+                          "is_time_limit_based": false,
+                          "is_life_based": false
+                        },
+                        {
+                          "slug": "type-speed",
+                          "name": "Type Speed",
+                          "logo": "keyboard",
+                          "id": "a600b3e5-c26e-4780-992f-22ba0d19e0a3",
+                          "description": "Lorem",
+                          "is_time_limit_based": true,
+                          "is_life_based": false
+                        }
+                      ]
+                    }
+                  },
+                  "2": {
+                    "summary": "Success - Lite",
+                    "value": {
+                      "success": true,
+                      "statusCode": 200,
+                      "message": "Get all game template successfully",
+                      "data": [
+                        {
+                          "slug": "quiz",
+                          "name": "Quiz",
+                          "logo": "atom"
+                        },
+                        {
+                          "slug": "anagram",
+                          "name": "Anagram",
+                          "logo": "book-a"
+                        },
+                        {
+                          "slug": "spin-the-wheel",
+                          "name": "Spin the Wheel",
+                          "logo": "disc-3"
+                        },
+                        {
+                          "slug": "open-the-box",
+                          "name": "Open the Box",
+                          "logo": "archive-restore"
+                        },
+                        {
+                          "slug": "unjumble",
+                          "name": "Unjumble",
+                          "logo": "combine"
+                        },
+                        {
+                          "slug": "matching-pair",
+                          "name": "Matching Pair",
+                          "logo": "users"
+                        },
+                        {
+                          "slug": "match-up",
+                          "name": "Match Up",
+                          "logo": "table"
+                        },
+                        {
+                          "slug": "flash-cards",
+                          "name": "Flash Cards",
+                          "logo": "sticker"
+                        },
+                        {
+                          "slug": "find-the-match",
+                          "name": "Find the Match",
+                          "logo": "square-activity"
+                        },
+                        {
+                          "slug": "group-sort",
+                          "name": "Group Sort",
+                          "logo": "square-stack"
+                        },
+                        {
+                          "slug": "complete-the-sentence",
+                          "name": "Complete the Sentence",
+                          "logo": "rectangle-ellipsis"
+                        },
+                        {
+                          "slug": "speaking-cards",
+                          "name": "Speaking Cards",
+                          "logo": "speech"
+                        },
+                        {
+                          "slug": "word-search",
+                          "name": "Word Search",
+                          "logo": "text-search"
+                        },
+                        {
+                          "slug": "gameshow-quiz",
+                          "name": "Gameshow Quiz",
+                          "logo": "theater"
+                        },
+                        {
+                          "slug": "maze-chase",
+                          "name": "Maze Chase",
+                          "logo": "gamepad-directional"
+                        },
+                        {
+                          "slug": "crossword",
+                          "name": "Crossword",
+                          "logo": "panels-right-bottom"
+                        },
+                        {
+                          "slug": "labelled-diagram",
+                          "name": "Labelled Diagram",
+                          "logo": "pin"
+                        },
+                        {
+                          "slug": "true-or-false",
+                          "name": "True or False",
+                          "logo": "book-open-check"
+                        },
+                        {
+                          "slug": "hangman",
+                          "name": "Hangman",
+                          "logo": "skull"
+                        },
+                        {
+                          "slug": "airplane",
+                          "name": "Airplane",
+                          "logo": "plane"
+                        },
+                        {
+                          "slug": "whack-a-mole",
+                          "name": "Whack-a-Mole",
+                          "logo": "gavel"
+                        },
+                        {
+                          "slug": "baloon-pop",
+                          "name": "Baloon Pop",
+                          "logo": "bow-arrow"
+                        },
+                        {
+                          "slug": "image-quiz",
+                          "name": "Image Quiz",
+                          "logo": "aperture"
+                        },
+                        {
+                          "slug": "flip-tiles",
+                          "name": "Flip Tiles",
+                          "logo": "copy-slash"
+                        },
+                        {
+                          "slug": "rank-order",
+                          "name": "Rank Order",
+                          "logo": "list-collapse"
+                        },
+                        {
+                          "slug": "win-or-lose-quiz",
+                          "name": "Win or Lose Quiz",
+                          "logo": "spade"
+                        },
+                        {
+                          "slug": "watch-and-memorize",
+                          "name": "Watch and Memorize",
+                          "logo": "brain"
+                        },
+                        {
+                          "slug": "word-magnet",
+                          "name": "Word Magnet",
+                          "logo": "magnet"
+                        },
+                        {
+                          "slug": "flying-fruit",
+                          "name": "Flying Fruit",
+                          "logo": "citrus"
+                        },
+                        {
+                          "slug": "math-generator",
+                          "name": "Math Generator",
+                          "logo": "sigma"
+                        },
+                        {
+                          "slug": "pair-or-no-pair",
+                          "name": "pair or No Pair",
+                          "logo": "grid-2x2-x"
+                        },
+                        {
+                          "slug": "speed-sorting",
+                          "name": "Speed Sorting",
+                          "logo": "clock-arrow-down"
+                        },
+                        {
+                          "slug": "spell-the-word",
+                          "name": "Spell the Word",
+                          "logo": "megaphone"
+                        },
+                        {
+                          "slug": "type-the-answer",
+                          "name": "Type the Answer",
+                          "logo": "text-cursor-input"
+                        },
+                        {
+                          "slug": "jeopardy",
+                          "name": "Jeopardy",
+                          "logo": "spotlight"
+                        },
+                        {
+                          "slug": "puzzle",
+                          "name": "Puzzle",
+                          "logo": "puzzle"
+                        },
+                        {
+                          "slug": "sliding-puzzle",
+                          "name": "Sliding Puzzle",
+                          "logo": "images"
+                        },
+                        {
+                          "slug": "type-speed",
+                          "name": "Type Speed",
+                          "logo": "keyboard"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/game/play-count": {
+      "post": {
+        "summary": "Update Game Play Count",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Game"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": "// Kalau usernya login, tambah Bearer token di header\r\n{\r\n    \"game_id\": \"196adfde-18ab-4491-8a91-4054b317428b\"\r\n}"
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 200,
+                      "const": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Game play count updated successfully"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/game/like": {
+      "post": {
+        "summary": "Update Game Like Count",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Game"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": "{\r\n    \"game_id\": \"196adfde-18ab-4491-8a91-4054b317428b\",\r\n    \"is_like\": true // false untuk unlike\r\n}"
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 200,
+                      "const": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "User liked game update successfully"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "default": 200,
+                      "const": 200
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "🌟 Server is healthy. Current time is 17/11/2025, 02.41.49"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/{file_path_full}": {
+      "get": {
+        "summary": "View File",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "file_path_full",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "uploads/profile-picture/hna_1763322027851.jpg",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "array"
+                    },
+                    {
+                      "type": "object"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "type": "null"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Pagination Meta": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer"
+          },
+          "perPage": {
+            "type": "integer"
+          },
+          "currentPage": {
+            "type": "integer"
+          },
+          "lastPage": {
+            "type": "integer",
+            "nullable": true
+          },
+          "prev": {
+            "type": "integer",
+            "nullable": true
+          },
+          "next": {
+            "type": "integer",
+            "nullable": true
+          }
+        },
+        "required": [
+          "currentPage",
+          "total",
+          "perPage"
+        ]
+      }
+    },
+    "responses": {
+      "OK": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "statusCode": {
+                  "type": "integer",
+                  "default": 200,
+                  "const": 200
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {}
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "integer"
+                          },
+                          {
+                            "type": "boolean"
+                          },
+                          {
+                            "type": "array"
+                          },
+                          {
+                            "type": "object"
+                          },
+                          {
+                            "type": "number"
+                          }
+                        ],
+                        "type": "null"
+                      }
+                    }
+                  ]
+                },
+                "meta": {
+                  "$ref": "#/components/schemas/Pagination%20Meta"
+                }
+              },
+              "required": [
+                "success",
+                "statusCode",
+                "message"
+              ]
+            },
+            "examples": {
+              "Login Success": {
+                "summary": "Login Success",
+                "value": {
+                  "success": true,
+                  "statusCode": 200,
+                  "message": "Logged in successfully",
+                  "data": {
+                    "access_token": "token"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Created": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "statusCode": {
+                  "type": "integer",
+                  "default": 201,
+                  "const": 201
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {}
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "integer"
+                          },
+                          {
+                            "type": "boolean"
+                          },
+                          {
+                            "type": "array"
+                          },
+                          {
+                            "type": "object"
+                          },
+                          {
+                            "type": "number"
+                          }
+                        ],
+                        "type": "null"
+                      }
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "success",
+                "statusCode",
+                "message"
+              ]
+            },
+            "examples": {
+              "Register Success": {
+                "summary": "Register Success",
+                "value": {
+                  "success": true,
+                  "statusCode": 201,
+                  "message": "Account created successfully"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "servers": [],
+  "security": []
+}

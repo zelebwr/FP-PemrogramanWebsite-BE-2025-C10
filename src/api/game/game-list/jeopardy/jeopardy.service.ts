@@ -26,15 +26,21 @@ export abstract class JeopardyService {
       data.thumbnail_image,
     );
 
+    const clueImagePaths: string[] = [];
+
+    if (data.files_to_upload && data.files_to_upload.length > 0) {
+      for (const file of data.files_to_upload) {
+        const path = await FileManager.upload(
+          `game/jeopardy/${newGameId}`,
+          file,
+        );
+        clueImagePaths.push(path);
+      }
+    }
+
     // Build the game JSON with generated IDs
     const gameJson: IJeopardyGameData = {
-      settings: {
-        time_limit_per_clue: data.settings.time_limit_per_clue,
-        allow_daily_double: data.settings.allow_daily_double,
-        double_jeopardy_multiplier: data.settings.double_jeopardy_multiplier,
-        max_teams: data.settings.max_teams,
-        starting_score: data.settings.starting_score,
-      },
+      settings: { ...data.settings },
       rounds: data.rounds.map((round, roundIndex) => ({
         id: `round-${String(roundIndex + 1).padStart(2, '0')}`,
         type: round.type,
@@ -44,14 +50,25 @@ export abstract class JeopardyService {
           id: `cat-${String(roundIndex + 1).padStart(2, '0')}-${String(categoryIndex + 1).padStart(2, '0')}`,
           title: category.title,
           order: categoryIndex,
-          clues: category.clues.map((clue, clueIndex) => ({
-            id: `clue-${String(roundIndex + 1).padStart(2, '0')}-${String(categoryIndex + 1).padStart(2, '0')}-${String(clueIndex + 1).padStart(2, '0')}`,
-            question: clue.question,
-            answer: clue.answer,
-            value: clue.value,
-            media_url: clue.media_url ?? null,
-            is_daily_double: clue.is_daily_double,
-          })),
+          clues: category.clues.map((clue, clueIndex) => {
+            let finalMediaUrl = clue.media_url ?? null;
+
+            if (
+              typeof clue.media_image_index === 'number' &&
+              clue.media_image_index >= 0
+            ) {
+              finalMediaUrl = clueImagePaths[clue.media_image_index] || null;
+            }
+
+            return {
+              id: `clue-${String(roundIndex + 1).padStart(2, '0')}-${String(categoryIndex + 1).padStart(2, '0')}-${String(clueIndex + 1).padStart(2, '0')}`,
+              question: clue.question,
+              answer: clue.answer,
+              value: clue.value,
+              media_url: finalMediaUrl,
+              is_daily_double: clue.is_daily_double,
+            };
+          }),
         })),
       })),
     };
@@ -360,13 +377,32 @@ export abstract class JeopardyService {
    */
   private static async getGameTemplateId() {
     const result = await prisma.gameTemplates.findUnique({
-      where: { slug: this.GAME_SLUG },
-      select: { id: true },
+      where: { slug: 'jeopardy' },
     });
 
     if (!result)
       throw new ErrorResponse(StatusCodes.NOT_FOUND, 'Game template not found');
 
     return result.id;
+  }
+
+  static async endGame(game_id: string) {
+    // 1. Check if game exists
+    const game = await prisma.games.findUnique({
+      where: { id: game_id },
+      select: { id: true, total_played: true },
+    });
+
+    if (!game) throw new ErrorResponse(StatusCodes.NOT_FOUND, 'Game not found');
+
+    // 2. Increment the play count
+    await prisma.games.update({
+      where: { id: game_id },
+      data: {
+        total_played: { increment: 1 },
+      },
+    });
+
+    return { message: 'Game session recorded' };
   }
 }

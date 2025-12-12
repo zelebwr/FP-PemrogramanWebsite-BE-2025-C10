@@ -28,7 +28,10 @@ export const JeopardyController = Router()
     validateAuth({}),
     validateBody({
       schema: CreateJeopardySchema,
-      file_fields: [{ name: 'thumbnail_image', maxCount: 1 }],
+      file_fields: [
+        { name: 'thumbnail_image', maxCount: 1 },
+        { name: 'files_to_upload', maxCount: 20 },
+      ],
     }),
     async (
       request: AuthedRequest<{}, {}, ICreateJeopardy>,
@@ -164,6 +167,29 @@ export const JeopardyController = Router()
       }
     },
   )
+
+  .post(
+    '/:game_id/end',
+    async (
+      request: Request<{ game_id: string }>,
+      response: Response,
+      next: NextFunction,
+    ) => {
+      try {
+        await JeopardyService.endGame(request.params.game_id);
+        const result = new SuccessResponse(
+          StatusCodes.OK,
+          'Game finished successfully',
+          null,
+        );
+
+        return response.status(result.statusCode).json(result.json());
+      } catch (error) {
+        return next(error);
+      }
+    },
+  )
+
   // Delete a Jeopardy game
   .delete(
     '/:game_id',

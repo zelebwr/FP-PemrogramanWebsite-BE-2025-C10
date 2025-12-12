@@ -91,5 +91,4 @@ export abstract class GameService {
 
     return gameTemplates;
   }
-
 }
