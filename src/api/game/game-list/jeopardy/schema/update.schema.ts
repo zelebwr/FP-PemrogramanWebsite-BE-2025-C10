@@ -59,6 +59,8 @@ export const UpdateJeopardySchema = z.object({
   description: z.string().max(256).trim().optional(),
   thumbnail_image: fileSchema({}).optional(),
   is_publish: StringToBooleanSchema.optional(),
+  // When present, instructs the service to publish immediately
+  is_publish_immediately: StringToBooleanSchema.optional(),
   settings: StringToObjectSchema(SettingsSchema).optional(),
   rounds: StringToObjectSchema(
     z

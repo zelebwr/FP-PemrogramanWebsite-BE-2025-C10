@@ -390,19 +390,15 @@ export abstract class JeopardyService {
     // 1. Check if game exists
     const game = await prisma.games.findUnique({
       where: { id: game_id },
-      select: { id: true, total_played: true },
+      select: { id: true },
     });
 
     if (!game) throw new ErrorResponse(StatusCodes.NOT_FOUND, 'Game not found');
 
-    // 2. Increment the play count
+    // 2. Increment the Play Count
     await prisma.games.update({
       where: { id: game_id },
-      data: {
-        total_played: { increment: 1 },
-      },
+      data: { total_played: { increment: 1 } },
     });
-
-    return { message: 'Game session recorded' };
   }
 }

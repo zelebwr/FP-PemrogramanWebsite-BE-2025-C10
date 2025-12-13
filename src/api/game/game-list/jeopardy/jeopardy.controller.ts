@@ -136,7 +136,7 @@ export const JeopardyController = Router()
     },
   )
   // Update a Jeopardy game
-  .patch(
+  .put(
     '/:game_id',
     validateAuth({}),
     validateBody({
@@ -149,8 +149,54 @@ export const JeopardyController = Router()
       next: NextFunction,
     ) => {
       try {
+        // Map 'is_publish' to 'is_publish_immediately' if necessary
+        const payload = { ...(request.body as Partial<IUpdateJeopardy>) };
+
+        if (payload.is_publish !== undefined) {
+          payload.is_publish_immediately = payload.is_publish;
+        }
+
         const updatedGame = await JeopardyService.updateGame(
-          request.body,
+          payload as IUpdateJeopardy,
+          request.params.game_id,
+          request.user!.user_id,
+          request.user!.role,
+        );
+        const result = new SuccessResponse(
+          StatusCodes.OK,
+          'Jeopardy game updated',
+          updatedGame,
+        );
+
+        return response.status(result.statusCode).json(result.json());
+      } catch (error) {
+        return next(error);
+      }
+    },
+  )
+
+  // Partial update a Jeopardy game
+  .patch(
+    '/:game_id',
+    validateAuth({}),
+    validateBody({
+      schema: UpdateJeopardySchema, // Reuse the schema
+    }),
+    async (
+      request: AuthedRequest<{ game_id: string }, {}, IUpdateJeopardy>,
+      response: Response,
+      next: NextFunction,
+    ) => {
+      try {
+        // Build payload from request.body (not params) and ensure proper typing
+        const payload = { ...(request.body as Partial<IUpdateJeopardy>) };
+
+        if (payload.is_publish !== undefined) {
+          payload.is_publish_immediately = payload.is_publish;
+        }
+
+        const updatedGame = await JeopardyService.updateGame(
+          payload as IUpdateJeopardy,
           request.params.game_id,
           request.user!.user_id,
           request.user!.role,
