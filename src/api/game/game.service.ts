@@ -47,6 +47,8 @@ export abstract class GameService {
         description: true,
         thumbnail_image: true,
         total_played: true,
+        is_published: true,
+        creator_id: true,
         _count: {
           select: {
             liked: true,
@@ -58,7 +60,6 @@ export abstract class GameService {
               select: { id: true },
             }
           : undefined,
-        is_published: is_private,
         game_template: {
           select: {
             name: true,
@@ -155,7 +156,7 @@ export abstract class GameService {
 
     if (!game) throw new ErrorResponse(StatusCodes.NOT_FOUND, 'Game not found');
 
-    if (user_role !== 'SUPER_ADMIN' || game.creator_id !== user_id)
+    if (user_role !== 'SUPER_ADMIN' && game.creator_id !== user_id)
       throw new ErrorResponse(
         StatusCodes.FORBIDDEN,
         'User not allowed to edit this data',
