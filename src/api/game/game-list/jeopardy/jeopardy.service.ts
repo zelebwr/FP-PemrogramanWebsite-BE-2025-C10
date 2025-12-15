@@ -385,20 +385,4 @@ export abstract class JeopardyService {
 
     return result.id;
   }
-
-  static async endGame(game_id: string) {
-    // 1. Check if game exists
-    const game = await prisma.games.findUnique({
-      where: { id: game_id },
-      select: { id: true },
-    });
-
-    if (!game) throw new ErrorResponse(StatusCodes.NOT_FOUND, 'Game not found');
-
-    // 2. Increment the Play Count
-    await prisma.games.update({
-      where: { id: game_id },
-      data: { total_played: { increment: 1 } },
-    });
-  }
 }
