@@ -2,18 +2,15 @@ import { type Prisma, type ROLE } from '@prisma/client';
 import { StatusCodes } from 'http-status-codes';
 import { v4 } from 'uuid';
 
-import { ErrorResponse, prisma as prismaClient } from '@/common';
+import { ErrorResponse, prisma } from '@/common';
 import { type IPairOrNoPairGameData } from '@/common/interface/games';
 import { FileManager } from '@/utils';
 
 import {
   type ICreatePairOrNoPair,
   type IEvaluate,
-  type IEvaluateResult,
   type IUpdatePairOrNoPair,
 } from './schema';
-
-const prisma = prismaClient;
 
 export abstract class PairOrNoPairService {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -212,10 +209,10 @@ export abstract class PairOrNoPairService {
     const gameJson: IPairOrNoPairGameData = {
       items: data.items
         ? data.items.map((item, index) => ({
-            id: `item-${String(index + 1).padStart(3, '0')}`,
-            left_content: item.left_content,
-            right_content: item.right_content,
-          }))
+          id: `item-${String(index + 1).padStart(3, '0')}`,
+          left_content: item.left_content,
+          right_content: item.right_content,
+        }))
         : (oldGameJson?.items ?? []),
     };
 
@@ -300,7 +297,7 @@ export abstract class PairOrNoPairService {
     data: IEvaluate,
     game_id: string,
     user_id?: string,
-  ): Promise<IEvaluateResult> {
+  ) {
     // Verify game exists and is a pair-or-no-pair game
     const game = await prisma.games.findUnique({
       where: { id: game_id },

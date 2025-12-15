@@ -24,22 +24,36 @@ export abstract class GameService {
     user_id?: string,
     current_user_id?: string,
   ) {
+    // Build filters array, excluding undefined values
+    const filters: Prisma.GamesWhereInput[] = [];
+
+    // Always filter by is_published for public/explore pages
+    if (!is_private) {
+      filters.push({ is_published: true });
+    }
+
+    // Search filter
+    if (query.search) {
+      filters.push({ name: { contains: query.search, mode: 'insensitive' } });
+    }
+
+    // Game template filter
+    if (query.gameTypeSlug) {
+      filters.push({ game_template: { slug: query.gameTypeSlug } });
+    }
+
+    // Creator filter
+    if (user_id) {
+      filters.push({ creator: { id: user_id } });
+    }
+
     const args: {
       where: Prisma.GamesWhereInput;
       select: Prisma.GamesSelect;
       orderBy: Prisma.GamesOrderByWithRelationInput[];
     } = {
       where: {
-        AND: [
-          { is_published: is_private ? undefined : true },
-          {
-            name: query.search
-              ? { contains: query.search, mode: 'insensitive' }
-              : undefined,
-          },
-          { game_template: { slug: query.gameTypeSlug } },
-          { creator: { id: user_id } },
-        ],
+        AND: filters.length > 0 ? filters : undefined,
       },
       select: {
         id: true,
@@ -47,8 +61,6 @@ export abstract class GameService {
         description: true,
         thumbnail_image: true,
         total_played: true,
-        is_published: true,
-        creator_id: true,
         _count: {
           select: {
             liked: true,
@@ -56,10 +68,11 @@ export abstract class GameService {
         },
         liked: current_user_id
           ? {
-              where: { user_id: current_user_id },
-              select: { id: true },
-            }
+            where: { user_id: current_user_id },
+            select: { id: true },
+          }
           : undefined,
+        is_published: is_private,
         game_template: {
           select: {
             name: true,
@@ -69,8 +82,8 @@ export abstract class GameService {
         creator: user_id
           ? undefined
           : {
-              select: { id: true, username: true },
-            },
+            select: { id: true, username: true },
+          },
       },
       orderBy: [
         { name: query.orderByName },

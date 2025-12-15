@@ -136,7 +136,7 @@ export const JeopardyController = Router()
     },
   )
   // Update a Jeopardy game
-  .put(
+  .patch(
     '/:game_id',
     validateAuth({}),
     validateBody({
@@ -149,19 +149,19 @@ export const JeopardyController = Router()
       next: NextFunction,
     ) => {
       try {
-        // Map 'is_publish' to 'is_publish_immediately' if necessary
-        const payload = { ...(request.body as Partial<IUpdateJeopardy>) };
-
-        if (payload.is_publish !== undefined) {
-          payload.is_publish_immediately = payload.is_publish;
+        // REVISI: Menggunakan request.body langsung karena tipe sudah dideklarasikan di parameter fungsi
+        if (request.body.is_publish !== undefined) {
+          request.body.is_publish_immediately = request.body.is_publish;
         }
 
+        // REVISI: Menghapus casting (as IUpdateJeopardy) karena tidak diperlukan lagi
         const updatedGame = await JeopardyService.updateGame(
-          payload as IUpdateJeopardy,
+          request.body,
           request.params.game_id,
           request.user!.user_id,
           request.user!.role,
         );
+
         const result = new SuccessResponse(
           StatusCodes.OK,
           'Jeopardy game updated',
@@ -174,45 +174,7 @@ export const JeopardyController = Router()
       }
     },
   )
-
-  // Partial update a Jeopardy game
-  .patch(
-    '/:game_id',
-    validateAuth({}),
-    validateBody({
-      schema: UpdateJeopardySchema, // Reuse the schema
-    }),
-    async (
-      request: AuthedRequest<{ game_id: string }, {}, IUpdateJeopardy>,
-      response: Response,
-      next: NextFunction,
-    ) => {
-      try {
-        // Build payload from request.body (not params) and ensure proper typing
-        const payload = { ...(request.body as Partial<IUpdateJeopardy>) };
-
-        if (payload.is_publish !== undefined) {
-          payload.is_publish_immediately = payload.is_publish;
-        }
-
-        const updatedGame = await JeopardyService.updateGame(
-          payload as IUpdateJeopardy,
-          request.params.game_id,
-          request.user!.user_id,
-          request.user!.role,
-        );
-        const result = new SuccessResponse(
-          StatusCodes.OK,
-          'Jeopardy game updated',
-          updatedGame,
-        );
-
-        return response.status(result.statusCode).json(result.json());
-      } catch (error) {
-        return next(error);
-      }
-    },
-  )
+  // REVISI: Menghapus endpoint .patch kedua yang duplikat
 
   .post(
     '/:game_id/end',
